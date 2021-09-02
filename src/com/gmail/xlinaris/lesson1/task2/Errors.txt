@@ -1,0 +1,104 @@
+interface Moveable {
+    void move();
+}
+
+interface Stopable {
+    void stop();
+}
+
+abstract class Car {
+    public Engine engine;
+    private String color;
+    private String name;
+
+/*
+Поле engine ошибочно имеет модификатор доступ public, что дает возможность изменять его в обход использования
+геттеров и сеттеров, что нарушает принцип инкапсуляции внутренних полей и внутренней логики класса
+и может привести к ошибкам при использовании данного абстрактного класса.
+
+ Методы start(), stop(), move() лучше вынести в интерфейс Moveable - так как они только все вместе взятые
+ реализуют процесс движения у наследников класса Car.
+
+Как минимум поле Engine должно инициализироваться в конструкторе наследников, так как без него
+реализация созданным объектом методов start(), stop(), move() будет выглядеть нелогичным.
+
+*/
+    protected void start() {
+        System.out.println("Car starting");
+    }
+
+    abstract void open();
+
+    public Engine getEngine() {
+        return engine;
+    }
+
+    public void setEngine(Engine engine) {
+        this.engine = engine;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+
+class LightWeightCar extends Car implements Moveable{
+
+    @Override
+    void open() {
+        System.out.println("Car is open");
+    }
+
+/*
+Так как данный класс реализует метод move(), то очевидно,
+что класс должен иметь конструктор с инициализацией поля engine.
+
+    LightWeightCar(Engine engine) {
+        this.engine=engine;
+    }
+
+ */
+    @Override
+    public void move() {
+        System.out.println("Car is moving");
+    }
+
+}
+0       //Случайная цифра 0 в коде.
+class Lorry extends Car, Moveable, Stopable{
+/*
+ Moveable, Stopable - являются интерфейсами, поэтому их необходимо имплементировать используя слово "implements"
+ строка должна быть такой:
+ class Lorry extends Car implements Moveable, Stopable{
+
+Так как класс Lorry реализует методы move() и stop(), то очевидно, что класс Lorry должен иметь конструктор
+с инициализацией поля engine:
+
+Lorrry(Engine engine) {
+this.engine=engine;
+}
+
+ Метод open() в родительском классе Car является абстрактным,
+ поэтому его необходимо переопределить и реализовать в наследниках класса, в том числе и в классе Lorry.
+ Этого здесь не сделано, что вызовет ошибку компиляции.
+*  */
+    public void move(){
+        System.out.println("Car is moving");
+    }
+
+    public void stop(){
+        System.out.println("Car is stop");
+    }
+}
